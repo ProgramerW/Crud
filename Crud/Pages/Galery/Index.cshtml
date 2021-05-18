@@ -1,0 +1,66 @@
+﻿@page
+@model Crud.Pages.Galery.IndexModel
+@{
+    ViewData["Title"] = "Index";
+    
+}
+
+    <div>
+        <h2 class="text-center display-4 mt-5 mb-4 text-dark">Galeria</h2>
+    </div>
+    <div class="row">
+        <div class="mb-4">
+            <a asp-page="Create" class="btn btn-primary">Subir imagen</a>
+        </div>
+    </div>
+
+    @if (Model.Galeria.Count() > 0)
+    {
+        <div class="card-columns">
+
+            @foreach (var item in Model.Galeria)
+            {
+             
+
+                <div>
+                    <a href="#" data-toggle="modal" data-target="#a_@Html.DisplayFor(modelItem => item.Id)">
+                        <div class="hovereffect mb-4">
+                            <img src="~/Images/@item.Imgname" alt="@item.Imgname" class="card-img-top" />
+                            <div class="overlay">
+                                <h2>@item.Imgtitle</h2>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="a_@Html.DisplayFor(modelItem => item.Id)" 
+                     tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                    <button type="button" class="close mr-2" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="modal-header text-white border-0">
+                        <h5 class="modal-title ml-auto mr-auto" id="exampleModalLabel">@Html.DisplayFor(modelItem => item.Imgtitle)</h5>
+                    </div>
+                    <div class="modal-dialog modal-lg-centered modal-content mt-1" role="document">
+
+                        <img src="~/Images/@item.Imgname" alt="@item.Imgname" class="img-fluid rounded" />
+                        <div class="modal-footer border-0 position-absolute">
+                            <form method="post">
+                                <button asp-page-handler="Delete" asp-route-id="@item.Id" onclick="return confirm('¿Esta seguro de querer eliminar esta imagen?')" class="btn btn-danger btn-sm boton">Borrar</button>
+                            </form>
+                            <a Asp-route-id="@item.Id" asp-page="Edit" class="btn btn-success btn-sm boton">Editar</a>
+                            <a href="@Url.Page("Index","DownloadFile",new {filename = @item.Imgname})"><i class="fas fa-download color-icon fa-3x"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No hay imagenes disponibles</p>
+    }
+
